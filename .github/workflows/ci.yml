@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-
+    branches: [ development ]
   pull_request:
     branches: [ development ]
 
@@ -33,3 +33,7 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
+    - name: Deploy to production
+      if: github.event_name == 'push'
+      run: heroku container:release web -a {{ github.repository.name }}
+      
